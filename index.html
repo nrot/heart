@@ -1,0 +1,110 @@
+<html>
+
+<head>
+    <title>Heart</title>
+    <meta charset="UTF-8">
+    <!-- <script src="sript.js" ></script>  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <style>
+        @font-face {
+            font-family: "Erotic";
+            src: url(./9395.ttf) format("truetype");
+        }
+    </style>
+</head>
+
+<body>
+    <!--<p>Hello world</p>
+    <p id="log"></p>-->
+    <canvas id="can" width="300" height="300"></canvas>
+    <p id="last_draw" hidden>
+    </p>
+    <script>
+        function draw() {
+            var date = new Date();
+            if (can.width == window.innerWidth && can.height == window.innerHeight) {
+                return;
+            }
+            if (last_draw.innerHTML) {
+                if (date.getTime() - last_draw.innerHTML < 5000) {
+                    setTimeout(draw, 3000);
+                    return;
+                }
+            }
+            last_draw.innerHTML = date.getTime();
+            console.log("draw: " + date);
+            cos = Math.cos;
+            sin = Math.sin;
+            var min = window.innerWidth < window.innerHeight ? window.innerWidth : window.innerHeight;
+            var k = min / 34;
+
+            function x(t) {
+                // var k = window.innerWidth / (16/4);
+                // k = 1;
+                var rx = -k * 16 * Math.pow(sin(t), 3);
+                rx += window.innerWidth / 2;
+                return rx;
+            };
+
+            function y(t) {
+                // var k = window.innerHeight / (13/4);
+                // k = 1;
+                var ry = -k * (13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t));
+                ry += window.innerHeight / 2 - 50;
+                return ry;
+            };
+            // var body = document.getElementsByTagName("body")[0];
+            // var can = document.createElement("canvas");
+            // body.appendChild(can);
+            can.width = window.innerWidth;
+            can.height = window.innerHeight;
+            // log.innerHTML = can.width + "x" + can.height;
+            var ctx = can.getContext("2d");
+            ctx.fillStyle = "#FFDDFF";
+            ctx.fillRect(0, 0, can.width, can.height);
+            ctx.fillStyle = "#FF06FF";
+            ctx.strokeStyle = "#FF064A";
+            ctx.lineWidth = 5;
+
+            ctx.beginPath();
+            ctx.moveTo(x(0), y(0));
+            // ctx.closePath();
+            var grad = ctx.createLinearGradient(can.width / 2 - k * 16, 0, can.width / 2 + k * 16, 0);
+            grad.addColorStop("0", "rgb(255,0,140)");
+            grad.addColorStop("0.5", "rgb(255,130,255)");
+            grad.addColorStop("1", "rgb(255,0,140)");
+            ctx.strokeStyle = grad;
+            ctx.fillStyle = grad;
+            var amount_steps = 200;
+            var step = 2 * Math.PI / amount_steps;
+            for (var i = 0; i < 2 * Math.PI; i += step) {
+                // console.log("color_g = " + (-cos(2*i)/2 + 0.5));
+                // // ctx.srtokeStyle == "rgb(255," + Math.round(150*(-cos(2*i)/2 + 0.5)) + ",255)";
+                // console.log("color_b = rgb(255," + Math.round(150*(-cos(2*i)/2 + 0.5)) + ",255)");
+                // console.log("color = " + ctx.strokeStyle);
+                // console.log("step = " + i);
+                ctx.lineTo(x(i), y(i));
+                // ctx.stroke();
+                // console.log("x = " + x(i) + "; y = " + y(i));
+            }
+            // ctx.closePath();
+            // ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = "rgb(255,20,140)";
+            ctx.font = "20vh Erotic";
+            ctx.textAlign = "center";
+            ctx.fillText("Лилия", can.width / 2, can.height / 2);
+        }
+        WebFont.load({
+            custom: {
+                families: ['Erotic'],
+                // urls: ['https://nrot.000webhostapp.com/9395.ttf']
+            },
+            active: draw
+        });
+        window.onresize = draw;
+		draw();
+    </script>
+</body>
+
+</html>
